@@ -6,7 +6,9 @@ import {
   SET_USER,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_ERROR,
-  ALERT_OFF
+  ALERT_OFF,
+  CREATE_TASK_SUCCESS,
+  CREATE_TASK_ERROR
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -37,6 +39,14 @@ const reducer = (state, action) => {
   }
 if(action.type===ALERT_OFF){
   return { ...state, alert:{showAlert: false,type:"",status:"" }};
+}
+if(action.type === CREATE_TASK_SUCCESS){
+  const {tasks } = state;
+  tasks.append(payload.task)
+  return {...state,}
+}
+if(action.type === CREATE_TASK_ERROR){
+  return {...state,isLoading:false,alert:{showAlert:true,type:"danger",status :action.status}};
 }
   throw new Error(`no such action : ${action}`);
 };

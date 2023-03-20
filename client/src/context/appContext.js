@@ -8,7 +8,9 @@ import {
   SET_LOADING,
   LOGIN_USER_ERROR,
   LOGIN_USER_SUCCESS,
-  ALERT_OFF
+  ALERT_OFF,
+  CREATE_TASK_SUCCESS,
+  CREATE_TASK_ERROR
 } from "./actions";
 const initialState = {
   user: null,
@@ -18,7 +20,7 @@ const initialState = {
     type:"",
     status:""
   },
-  editComplete: true,
+  tasks:[]
 };
 
 const AppContext = React.createContext();
@@ -69,8 +71,7 @@ const AppProvider = ({ children }) => {
         JSON.stringify({ name: data.user.name, token: data.token })
       );
     } catch (error) {
-      const {data,status} = error.response
-      console.log(data,status);
+      const {status} = error.response
       dispatch({ type: LOGIN_USER_ERROR,status:status });
     }
   };
@@ -79,7 +80,18 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem("user");
     dispatch({ type: LOGOUT_USER });
   };
-
+  const createTask = async (userInput) =>{
+    try {
+      const { data, status } = await axios.post(
+        `http://localhost:5000/api/v1/task/`,
+        userInput
+      );
+      dispatch({type:CREATE_TASK_SUCCESS, payload:data.task})
+    } catch (error) {
+      const {status} = error.response;
+      dispatch({type: CREATE_TASK_ERROR , status:status})
+    }
+  }
   // useEffect(() => {
   //   const user = localStorage.getItem("user");
   //   if (user) {

@@ -1,7 +1,7 @@
 import { useGlobalContext } from "../context/appContext";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FaUserCircle, FaCaretDown } from "react-icons/fa";
+import {FaUserCircle , FaCaretDown} from 'react-icons/fa'
 const Navbar = () => {
   const { user, logout } = useGlobalContext();
   const [showLogout, setShowLogout] = useState(false);

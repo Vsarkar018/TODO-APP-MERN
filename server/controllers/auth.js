@@ -7,14 +7,13 @@ const register = async (req, res) => {
   const token = user.CreateJwt();
   res.status(StatusCodes.CREATED).send({
     user: {
-      name:user.name
+      name: user.name,
     },
     token,
   });
 };
 const login = async (req, res) => {
   const { email, password } = req.body;
-
   if (!email || !password) {
     throw new BadRequest("Please Provide email and password");
   }

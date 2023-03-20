@@ -6,3 +6,5 @@ export const LOGIN_USER_ERROR='LOGIN_USER_ERROR'
 export const SET_USER = 'SET_USER'
 export const LOGOUT_USER = "LOGOUT_USER";
 export const ALERT_OFF = 'ALERT_OFF'
+export const CREATE_TASK_ERROR = "CREATE_TASK_ERROR";
+export const CREATE_TASK_SUCCESS = "CREATE_TASK_SUCCESS";
