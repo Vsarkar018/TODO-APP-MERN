@@ -13,11 +13,9 @@ const getAllTasks = async (req, res) => {
   res.status(StatusCodes.OK).json({ tasks, count: tasks.length });
 };
 const getTask = async (req, res) => {
-  const {
-    user: userId,
-    params: { id: taskId },
-  } = req;
-  const task = Todo.findOne({ _id: taskId, createdBy: userId });
+  console.log(req.user.userId,req.params.id);
+  const task = await Todo.findOne({ _id: req.params.id, createdBy: req.user.userId });
+  console.log(task);
   if (!task) {
     throw new NotFound("No job found ");
   }
@@ -43,7 +41,7 @@ const editTask = async (req, res) => {
   if (!task) {
     throw new NotFound("Task not found");
   }
-  return res.status(StatusCodeS.OK).json({ task });
+  return res.status(StatusCodes.OK).json({ task });
 };
 
 const deleteTask = async (req, res) => {
@@ -51,11 +49,11 @@ const deleteTask = async (req, res) => {
     user: { userId },
     params: { id: taskId },
   } = req;
-  const job = await Todo.findByIdAndRemove({ _id: taskId, createdBy: userId });
+  const task = await Todo.findByIdAndRemove({ _id: taskId, createdBy: userId });
   if (!task) {
     throw new NotFound("Task not found");
   }
-  res.status(StatusCodes.OK).send();
+  res.status(StatusCodes.OK).json("Task deleted");
 };
 
 module.exports = { createTask, getTask, getAllTasks, editTask, deleteTask };
