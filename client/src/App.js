@@ -16,7 +16,7 @@ function App() {
           element={
             // <PrivateRoute>
               <Dashboard />
-             /* </PrivateRoute> */
+            // </PrivateRoute>
           }
         />
         <Route path="/register" element={<Register />} />

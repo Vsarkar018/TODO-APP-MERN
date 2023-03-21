@@ -1,10 +1,13 @@
+import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../context/appContext";
-import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import FormRow from "../components/FormRow";
+import Tasks from "../components/tasks";
+
+
 function Dashboard() {
-  const { isLoading, createTask, fetchTask } = useGlobalContext();
+  const { isLoading, createTask, fetchTask, alert } = useGlobalContext();
   const [task, setTask] = useState([]);
   const handleChange = (e) => {
     setTask(e.target.value);
@@ -23,22 +26,31 @@ function Dashboard() {
       <Navbar />
 
       <Wrapper className="page">
-        <form onSubmit={handleSubmit} className="job-form">
+        {alert.showAlert && (
+          <div className="alert alert-danger">
+            there was an error, please try again
+          </div>
+        )}
+        <form className="job-form" onSubmit={handleSubmit}> 
           <FormRow
             type="name"
+            name="task"
             value={task}
-            name="Task"
-            placeholder="Task"
-            onChange={handleChange}
+            handleChange={handleChange}
+            horizontal
+            placeholder="task"
           />
           <button type="submit" className="btn" disabled={isLoading}>
-            {isLoading ? "Adding task..." : "Add Task"}
+            {isLoading ? "Adding New Task..." : "Add Task"}
           </button>
         </form>
+
+        <Tasks />
       </Wrapper>
     </>
   );
 }
+
 const Wrapper = styled.section`
   padding: 3rem 0;
 
@@ -52,7 +64,7 @@ const Wrapper = styled.section`
     border-radius: var(--borderRadius);
     padding: 1.5rem;
     .form-input {
-     padding: 0.75rem;
+      padding: 0.75rem;
     }
 
     .form-input:focus {
