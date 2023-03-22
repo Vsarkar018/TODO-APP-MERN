@@ -5,10 +5,9 @@ import Navbar from "../components/Navbar";
 import FormRow from "../components/FormRow";
 import Tasks from "../components/tasks";
 
-
 function Dashboard() {
-  const { isLoading, createTask, fetchTask, alert } = useGlobalContext();
-  const [task, setTask] = useState([]);
+  const { isLoading, createTask, fetchAllTask, alert } = useGlobalContext();
+  const [task, setTask] = useState("");
   const handleChange = (e) => {
     setTask(e.target.value);
   };
@@ -16,11 +15,12 @@ function Dashboard() {
     e.preventDefault();
     if (task) {
       createTask(task);
+      setTask("");
     }
   };
-  // useEffect(()=>{
-  //   fetchTask();
-  // },[])
+  useEffect(()=>{
+    fetchAllTask();
+  },[])
   return (
     <>
       <Navbar />
@@ -28,10 +28,10 @@ function Dashboard() {
       <Wrapper className="page">
         {alert.showAlert && (
           <div className="alert alert-danger">
-            there was an error, please try again
+            {alert.msg}
           </div>
         )}
-        <form className="job-form" onSubmit={handleSubmit}> 
+        <form className="job-form" onSubmit={handleSubmit}>
           <FormRow
             type="name"
             name="task"

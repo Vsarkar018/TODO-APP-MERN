@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/appContext";
-import main from '../assets/main.svg'
+import main from "../assets/main.svg";
 import styled from "styled-components";
 
 function Home() {
@@ -11,20 +11,26 @@ function Home() {
       {user && navigate("/dashboard")}
       <Wrapper>
         <nav>
-      <p className="logo">TODO</p>
+          <p className="logo">TODO</p>
         </nav>
         <div className="container page">
           <div className="info">
             <h1>TODO Manager app</h1>
             <p>
-Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus dolore fugiat culpa laboriosam velit distinctio debitis, ut aliquid temporibus delectus obcaecati. Voluptatem iusto, consectetur natus, exercitationem eaque laborum dolorem, nostrum repellendus ut nesciunt dolorum maxime? Laborum, odit animi autem architecto, alias consequatur maiores minima repellat perspiciatis nisi totam id provident.
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+              Accusamus dolore fugiat culpa laboriosam velit distinctio debitis,
+              ut aliquid temporibus delectus obcaecati. Voluptatem iusto,
+              consectetur natus, exercitationem eaque laborum dolorem, nostrum
+              repellendus ut nesciunt dolorum maxime? Laborum, odit animi autem
+              architecto, alias consequatur maiores minima repellat perspiciatis
+              nisi totam id provident.
             </p>
 
             <Link to="/register" className="btn hero-btn">
               Login / Register
             </Link>
           </div>
-          <img src={main} alt="job hunt" className="img main-img" />
+          <img src={main} alt="task manager" className="img main-img" />
         </div>
       </Wrapper>
     </>

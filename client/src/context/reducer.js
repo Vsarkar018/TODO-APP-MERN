@@ -11,6 +11,7 @@ import {
   CREATE_TASK_ERROR,
   FETCH_ALL_TASKS,
   FETCH_ALL_TASKS_ERROR,
+  SET_USER_ERROR,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -39,7 +40,7 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       user: null,
-      alert: { showAlert: true, type: "danger", status: action.status },
+      alert: { showAlert: true, type: "danger" ,status:action.status, msg: action.msg },
     };
   }
   if (action.type === LOGIN_USER_ERROR) {
@@ -47,12 +48,21 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       user: null,
-      alert: { showAlert: true, type: "danger", status: action.status },
+      alert: {
+        showAlert: true,
+        type: "danger",
+        status: action.status,
+        msg: action.msg,
+      },
     };
   }
   if (action.type === SET_USER) {
     return { ...state, user: action.payload };
   }
+  if (action.type === SET_USER_ERROR) {
+    return { ...state, user: null };
+  }
+
   if (action.type === LOGOUT_USER) {
     return { ...state, user: null, showAlert: false };
   }
@@ -73,7 +83,7 @@ const reducer = (state, action) => {
       alert: { showAlert: true, type: "danger", status: action.status },
     };
   }
-  
+
   if (action.type === SET_USER) {
     return { ...state, user: action.payload };
   }

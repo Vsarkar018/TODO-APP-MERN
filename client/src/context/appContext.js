@@ -13,6 +13,8 @@ import {
   CREATE_TASK_ERROR,
   FETCH_ALL_TASKS_ERROR,
   FETCH_ALL_TASKS,
+  SET_USER,
+  SET_USER_ERROR,
 } from "./actions";
 const initialState = {
   user: null,
@@ -21,43 +23,9 @@ const initialState = {
     showAlert: false,
     type: "",
     status: "",
+    msg: "",
   },
-  tasks: [
-    {
-      _id: {
-        $oid: "6419e03a289a8b33694560e9",
-      },
-      task: "v 2 ",
-      status: "pending",
-      createdBy: {
-        $oid: "6419d91b6829a9d39b6a9d6a",
-      },
-      createdAt: {
-        $date: "2023-03-21T16:50:02.948Z",
-      },
-      updatedAt: {
-        $date: "2023-03-21T16:50:02.948Z",
-      },
-      __v: 0,
-    },
-    {
-      _id: {
-        $oid: "6419e03a289a8b33694560e9",
-      },
-      task: "v 2 ",
-      status: "pending",
-      createdBy: {
-        $oid: "6419d91b6829a9d39b6a9d6a",
-      },
-      createdAt: {
-        $date: "2023-03-21T16:50:02.948Z",
-      },
-      updatedAt: {
-        $date: "2023-03-21T16:50:02.948Z",
-      },
-      __v: 0,
-    },
-  ],
+  tasks: [],
   editItem: null,
   singleJobError: false,
   editComplete: false,
@@ -90,9 +58,11 @@ const AppProvider = ({ children }) => {
         JSON.stringify({ name: data.user.name, token: data.token })
       );
     } catch (error) {
-      const { data, status } = error.response;
-      console.log(data, status);
-      dispatch({ type: REGISTER_USER_ERROR, status: status });
+      const {
+        data: { msg: msg },
+        status,
+      } = error.response;
+      dispatch({ type: REGISTER_USER_ERROR, status: status, msg: msg });
     }
   };
 
@@ -116,8 +86,11 @@ const AppProvider = ({ children }) => {
         JSON.stringify({ name: data.user.name, token: data.token })
       );
     } catch (error) {
-      const { status } = error.response;
-      dispatch({ type: LOGIN_USER_ERROR, status: status });
+      const {
+        status,
+        data: { msg: msg },
+      } = error.response;
+      dispatch({ type: LOGIN_USER_ERROR, status: status, msg: msg });
     }
   };
 
@@ -126,33 +99,48 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGOUT_USER });
   };
   const createTask = async (userInput) => {
+    setLoading();
     try {
+      const { token } = JSON.parse(localStorage.getItem("user"));
       const { data } = await axios.post(
-        `http://localhost:5000/api/v1/task/`,
-        ...userInput
+        `http://localhost:5000/api/v1/tasks`,
+        { task: userInput },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+      console.log(data);
       dispatch({ type: CREATE_TASK_SUCCESS, payload: data.task });
     } catch (error) {
       const { status } = error.response;
+      console.log(error.response.data.msg);
       dispatch({ type: CREATE_TASK_ERROR, status: status });
     }
   };
   const fetchAllTask = async () => {
     try {
-      const { data } = await axios.get("/tasks");
+      const { token } = JSON.parse(localStorage.getItem("user"));
+      const { data } = await axios.get("http://localhost:5000/api/v1/tasks", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch({ type: FETCH_ALL_TASKS, payload: data.tasks });
     } catch (error) {
       const { status } = error.response;
       dispatch({ type: FETCH_ALL_TASKS_ERROR, status: status });
     }
   };
-  // useEffect(() => {
-  //   const user = localStorage.getItem("user");
-  //   if (user) {
-  //     const newUser = JSON.parse(user);
-  //     dispatch({ type: SET_USER, payload: newUser.name });
-  //   }
-  // }, []);
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      const newUser = JSON.parse(user);
+      dispatch({ type: SET_USER, payload: newUser.name });
+    }
+  }, []);
   useEffect(() => {
     const timeout = setTimeout(() => {
       dispatch({ type: ALERT_OFF });

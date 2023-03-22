@@ -17,8 +17,8 @@ const Jobs = () => {
     return (
       <EmptyContainer>
         <h5>
-          Currently, you have no <span>JOBS </span>
-          to display
+          Currently, you have no <span>Tasks... </span>
+          Get up and do some work
         </h5>
       </EmptyContainer>
     );

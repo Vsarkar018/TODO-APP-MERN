@@ -8,14 +8,17 @@ const createTask = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ task });
 };
 const getAllTasks = async (req, res) => {
-  const tasks = await Todo.find({createdBy:req.user.userId}).sort(
+  const tasks = await Todo.find({ createdBy: req.user.userId }).sort(
     "createdAt"
   );
   res.status(StatusCodes.OK).json({ tasks, count: tasks.length });
 };
 const getTask = async (req, res) => {
-  console.log(req.user.userId,req.params.id);
-  const task = await Todo.findOne({ _id: req.params.id, createdBy: req.user.userId });
+  console.log(req.user.userId, req.params.id);
+  const task = await Todo.findOne({
+    _id: req.params.id,
+    createdBy: req.user.userId,
+  });
   console.log(task);
   if (!task) {
     throw new NotFound("No job found ");

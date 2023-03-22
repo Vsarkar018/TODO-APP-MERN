@@ -25,7 +25,7 @@ function Login() {
         <div className="container">
           {alert.showAlert && (
             <div className={`alert alert-${alert.type}`}>
-              Incorrect email or pssword
+              {alert.msg}
             </div>
           )}
           <form className="form" onSubmit={handleSubmit}>

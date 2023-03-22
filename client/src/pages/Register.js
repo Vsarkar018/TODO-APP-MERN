@@ -24,7 +24,7 @@ const Register = () => {
       {user && navigate("/dashboard")}
       <Wrapper className="page full-page">
         <div className="container">
-          {alert.showAlert && (
+          {alert.showAlert && ( 
             <div className={`alert alert-${alert.type}`}>
               {alert.type === "success"
                 ? "Registration Successful"
