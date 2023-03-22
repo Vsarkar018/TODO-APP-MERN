@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Error from "./pages/Error";
 import PrivateRoute from "./pages/PrivateRoute";
 import Login from "./pages/Login";
+import Edit from "./pages/Edit";
 function App() {
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
         />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/tasks/edit/:id" element={<Edit />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>

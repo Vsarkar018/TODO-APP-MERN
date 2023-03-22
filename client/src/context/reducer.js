@@ -12,6 +12,12 @@ import {
   FETCH_ALL_TASKS,
   FETCH_ALL_TASKS_ERROR,
   SET_USER_ERROR,
+  DELETE_TASK,
+  DELETE_TASK_ERROR,
+  FETCH_TASK,
+  FETCH_TASK_ERROR,
+  EDIT_TASK,
+  EDIT_TASK_ERROR,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -40,7 +46,12 @@ const reducer = (state, action) => {
       ...state,
       isLoading: false,
       user: null,
-      alert: { showAlert: true, type: "danger" ,status:action.status, msg: action.msg },
+      alert: {
+        showAlert: true,
+        type: "danger",
+        status: action.status,
+        msg: action.msg,
+      },
     };
   }
   if (action.type === LOGIN_USER_ERROR) {
@@ -80,7 +91,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      alert: { showAlert: true, type: "danger", status: action.status },
+      alert: { showAlert: true, type: "danger", status: action.status , msg:action.msg },
     };
   }
 
@@ -104,6 +115,42 @@ const reducer = (state, action) => {
   }
   if (action.type === FETCH_ALL_TASKS_ERROR) {
     return { ...state, isLoading: false };
+  }
+  if (action.type === DELETE_TASK) {
+    return { ...state, isLoading: false };
+  }
+  if (action.type === DELETE_TASK_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      alert: { showAlert: true, status: action.status, msg: action.msg },
+    };
+  }
+  if (action.type === FETCH_TASK) {
+    return { ...state, isLoading: false, editItem: action.payload };
+  }
+  if (action.type === FETCH_TASK_ERROR) {
+    return { ...state, isLoading: false, editItem: "", singleTaskError: true };
+  }
+  if (action.type === EDIT_TASK) {
+    return {
+      ...state,
+      isLoading: false,
+      editItem: action.payload,
+      alert: { showAlert: true, type: "success", msg: action.msg },
+    };
+  }
+  if (action.type === EDIT_TASK_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      alert: {
+        showAlert: true,
+        type: "danger",
+        status: action.status,
+        msg: action.msg,
+      },
+    };
   }
   throw new Error(`no such action : ${action}`);
 };

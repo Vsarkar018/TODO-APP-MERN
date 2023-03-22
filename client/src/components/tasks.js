@@ -7,7 +7,7 @@ import moment from "moment";
 import TasksColumn from "./TasksColumn";
 
 const Jobs = () => {
-  const { tasks, isLoading, deleteJob } = useGlobalContext();
+  const { tasks, isLoading, deleteTask} = useGlobalContext();
 
   if (isLoading) {
     return <div className="loading"></div>;
@@ -29,7 +29,7 @@ const Jobs = () => {
       <TasksColumn />
       <Container>
         {tasks.map((item) => {
-          const { _id: id, task ,status, createdAt } = item;
+          const { _id: id, task, status, createdAt } = item;
           let date = moment(createdAt);
           date = date.format("MMMM Do, YYYY");
           return (
@@ -41,13 +41,13 @@ const Jobs = () => {
                 {status}
               </StatusContainer>
               <div className="action-div">
-                <Link to={`/edit/${id}`} className="edit-btn" type="button">
+                <Link to={`/tasks/edit/${id}`} className="edit-btn" type="button">
                   <FaEdit />
                 </Link>
                 <button
                   className=" delete-btn"
                   type="button"
-                  onClick={() => deleteJob(id)}
+                  onClick={() => deleteTask(id)}
                 >
                   <FaTrash />
                 </button>
@@ -192,13 +192,17 @@ const Container = styled.section`
   }
 `;
 const setStatusColor = (status) => {
-  if (status === "pending") return "#0f5132";
-  if (status === "discarded") return "#842029";
+  if (status === "Done") return "#0f5132";
+  if (status === "Discarded") return "#842029";
+  if (status === "Pending") return "#842029";
+  if (status === "Postponed") return "#842029";
   return "#927238";
 };
 const setStatusBackground = (status) => {
-  if (status === "pending") return "#d1e7dd";
-  if (status === "discarded") return "#f8d7da";
+  if (status === "Done") return "#d1e7dd";
+  if (status === "Discarded") return "#f8d7da";
+  if (status === "Pending") return "#fffacd";
+  if (status === "Postponed") return "#FFA500";
   return "#f7f3d7";
 };
 

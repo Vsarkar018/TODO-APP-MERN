@@ -238,7 +238,7 @@ ul {
 
 ::placeholder {
   font-family: inherit;
-  color: var(--grey-400) !important;
+  /* color: var(--grey-400) !important; */
   letter-spacing: var(--letterSpacing);
 }
 

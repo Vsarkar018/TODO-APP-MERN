@@ -19,7 +19,6 @@ const getTask = async (req, res) => {
     _id: req.params.id,
     createdBy: req.user.userId,
   });
-  console.log(task);
   if (!task) {
     throw new NotFound("No job found ");
   }

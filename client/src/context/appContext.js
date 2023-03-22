@@ -14,7 +14,12 @@ import {
   FETCH_ALL_TASKS_ERROR,
   FETCH_ALL_TASKS,
   SET_USER,
-  SET_USER_ERROR,
+  DELETE_TASK,
+  DELETE_TASK_ERROR,
+  FETCH_TASK_ERROR,
+  FETCH_TASK,
+  EDIT_TASK,
+  EDIT_TASK_ERROR,
 } from "./actions";
 const initialState = {
   user: null,
@@ -27,9 +32,10 @@ const initialState = {
   },
   tasks: [],
   editItem: null,
-  singleJobError: false,
-  editComplete: false,
+  singleTaskError: false,
 };
+
+const url = `http://localhost:5000/api/v1/`;
 
 const AppContext = React.createContext();
 
@@ -42,12 +48,9 @@ const AppProvider = ({ children }) => {
   const register = async (userInput) => {
     setLoading();
     try {
-      const { data, status } = await axios.post(
-        `http://localhost:5000/api/v1/auth/register`,
-        {
-          ...userInput,
-        }
-      );
+      const { data, status } = await axios.post(`${url}auth/register`, {
+        ...userInput,
+      });
       console.log(data, status);
       dispatch({
         type: REGISTER_USER_SUCCESS,
@@ -69,12 +72,9 @@ const AppProvider = ({ children }) => {
   const login = async (userInput) => {
     setLoading();
     try {
-      const { data, status } = await axios.post(
-        `http://localhost:5000/api/v1/auth/login`,
-        {
-          ...userInput,
-        }
-      );
+      const { data, status } = await axios.post(`${url}auth/login`, {
+        ...userInput,
+      });
       // console.log(data,status);
       console.log(data.user.name);
       dispatch({
@@ -103,7 +103,7 @@ const AppProvider = ({ children }) => {
     try {
       const { token } = JSON.parse(localStorage.getItem("user"));
       const { data } = await axios.post(
-        `http://localhost:5000/api/v1/tasks`,
+        `${url}tasks`,
         { task: userInput },
         {
           headers: {
@@ -114,15 +114,18 @@ const AppProvider = ({ children }) => {
       console.log(data);
       dispatch({ type: CREATE_TASK_SUCCESS, payload: data.task });
     } catch (error) {
-      const { status } = error.response;
-      console.log(error.response.data.msg);
-      dispatch({ type: CREATE_TASK_ERROR, status: status });
+      const {
+        data: { msg: msg },
+        status,
+      } = error.response;
+      dispatch({ type: CREATE_TASK_ERROR, status: status, msg: msg });
     }
   };
   const fetchAllTask = async () => {
+    setLoading();
     try {
       const { token } = JSON.parse(localStorage.getItem("user"));
-      const { data } = await axios.get("http://localhost:5000/api/v1/tasks", {
+      const { data } = await axios.get(`${url}tasks`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -133,7 +136,70 @@ const AppProvider = ({ children }) => {
       dispatch({ type: FETCH_ALL_TASKS_ERROR, status: status });
     }
   };
-
+  const deleteTask = async (taskId) => {
+    try {
+      const { token } = JSON.parse(localStorage.getItem("user"));
+      await axios.delete(`${url}tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      fetchAllTask();
+      dispatch({ type: DELETE_TASK });
+      console.log("deletetask");
+    } catch (error) {
+      const {
+        data: { msg: msg },
+        status,
+      } = error.response;
+      dispatch({ type: DELETE_TASK_ERROR, msg: msg, status: status });
+    }
+  };
+  const fetchSingleTask = async (taskId) => {
+    setLoading();
+    try {
+      const { token } = JSON.parse(localStorage.getItem("user"));
+      const { data } = await axios.get(`${url}tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch({ type: FETCH_TASK, payload: data.task });
+    } catch (error) {
+      const {
+        data: { msg: msg },
+        status,
+      } = error.response;
+      dispatch({ type: FETCH_TASK_ERROR, status: status, msg: msg });
+    }
+  };
+  const editTask = async (taskId, userInput) => {
+    setLoading();
+    try {
+      const { token } = JSON.parse(localStorage.getItem("user"));
+      const { data } = await axios.patch(
+        `${url}tasks/edit/${taskId}`,
+        { ...userInput },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(data);
+      dispatch({
+        type: EDIT_TASK,
+        payload: data.task,
+        msg: "Updated Successfully...",
+      });
+    } catch (error) {
+      const {
+        data: { msg: msg },
+        status,
+      } = error.response;
+      dispatch({ type: EDIT_TASK_ERROR, msg: msg, status: status });
+    }
+  };
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -157,6 +223,9 @@ const AppProvider = ({ children }) => {
         logout,
         createTask,
         fetchAllTask,
+        deleteTask,
+        fetchSingleTask,
+        editTask,
       }}
     >
       {children}

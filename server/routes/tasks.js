@@ -1,7 +1,4 @@
 const express = require("express");
-const {
-  updateTasks,
-} = require("../../../Node/node-express-course/03-task-manager/starter/controllers/tasks");
 const router = express.Router();
 
 const {
@@ -13,6 +10,7 @@ const {
 } = require("../controllers/tasks");
 
 router.route("/").get(getAllTasks).post(createTask);
-router.route("/:id").patch(editTask).delete(deleteTask).get(getTask);
+router.route("edit/:id").patch(editTask);
+router.route("/:id").delete(deleteTask).get(getTask);
 
 module.exports = router;

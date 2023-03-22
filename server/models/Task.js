@@ -6,11 +6,12 @@ const TodoSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter a valid task"],
       maxlenght: 50,
+      unique:true
     },
     status: {
       type: String,
-      enum: ["done", "pending", "Discarded", "Postponed"],
-      default: "pending",
+      enum: ["Done", "Pending", "Discarded", "Postponed"],
+      default: "Pending",
     },
     createdBy: {
       type: mongoose.Types.ObjectId,
