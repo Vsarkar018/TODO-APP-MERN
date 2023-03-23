@@ -35,7 +35,7 @@ const initialState = {
   singleTaskError: false,
 };
 
-const url = `http://localhost:5000/api/v1/`;
+const url = `/api/v1/`;
 
 const AppContext = React.createContext();
 
@@ -186,7 +186,6 @@ const AppProvider = ({ children }) => {
           },
         }
       );
-      console.log(data);
       dispatch({
         type: EDIT_TASK,
         payload: data.task,

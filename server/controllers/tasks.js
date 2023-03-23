@@ -14,7 +14,6 @@ const getAllTasks = async (req, res) => {
   res.status(StatusCodes.OK).json({ tasks, count: tasks.length });
 };
 const getTask = async (req, res) => {
-  console.log(req.user.userId, req.params.id);
   const task = await Todo.findOne({
     _id: req.params.id,
     createdBy: req.user.userId,
